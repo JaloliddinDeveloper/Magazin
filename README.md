@@ -1,0 +1,2 @@
+# Magazin
+Online magazin api
