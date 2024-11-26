@@ -10,8 +10,7 @@ public class Program
         builder.Services.AddControllers();
 
         builder.Services.AddTransient<IStorageBroker, StorageBroker>();
-
-        builder.Services.AddTransient<IProductService,ProductService>();
+        builder.Services.AddTransient<IProductService, ProductService>();
 
         builder.Services.AddEndpointsApiExplorer();
 
@@ -21,9 +20,9 @@ public class Program
         {
             options.AddPolicy("AllowAll", policy =>
             {
-                policy.AllowAnyOrigin()
-                      .AllowAnyHeader()
-                      .AllowAnyMethod();
+                policy.AllowAnyOrigin()  
+                      .AllowAnyHeader()  
+                      .AllowAnyMethod(); 
             });
         });
 
