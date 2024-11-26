@@ -1,4 +1,5 @@
 using Magazin.Brokers.Storages;
+using Magazin.Services.Foundations.Products;
 
 public class Program
 {
@@ -10,9 +11,21 @@ public class Program
 
         builder.Services.AddTransient<IStorageBroker, StorageBroker>();
 
+        builder.Services.AddTransient<IProductService,ProductService>();
+
         builder.Services.AddEndpointsApiExplorer();
 
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
 
         var app = builder.Build();
 
@@ -25,6 +38,8 @@ public class Program
         app.UseStaticFiles();
 
         app.UseHttpsRedirection();
+
+        app.UseCors("AllowAll");
 
         app.UseAuthorization();
 

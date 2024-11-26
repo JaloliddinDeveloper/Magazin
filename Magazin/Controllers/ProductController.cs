@@ -1,5 +1,6 @@
 ﻿using Magazin.Brokers.Storages;
 using Magazin.Models.Foundations.Products;
+using Magazin.Services.Foundations.Products;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,16 @@ namespace Magazin.Controllers
     public class ProductController : RESTFulController
     {
         private readonly IStorageBroker storageBroker;
+        private readonly IProductService productService;
         private readonly IWebHostEnvironment webHostEnvironment;
 
         public ProductController(
-            IStorageBroker storageBroker,
+            IStorageBroker storageBroker, 
+            IProductService productService, 
             IWebHostEnvironment webHostEnvironment)
         {
             this.storageBroker = storageBroker;
+            this.productService = productService;
             this.webHostEnvironment = webHostEnvironment;
         }
 
@@ -63,15 +67,27 @@ namespace Magazin.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProductByIdAsync(int id)
         {
-            var product = await this.storageBroker.SelectProductByIdAsync(id);
+            var product = await this.productService.RemoveProductAsync(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
+            return product;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Product>> DeleteProductAsync(int id)
+        {
+            var product = await this.productService.RemoveProductAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
             return product;
         }
     }
